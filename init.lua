@@ -1,4 +1,7 @@
+local S = minetest.get_translator("emeralds")
 local settings = Settings(minetest.get_modpath("emeralds").."/settings.txt")
+local toolranks_loaded = minetest.get_modpath("toolranks")
+local farm = minetest.get_modpath("farming")
 
 --
 --  Item Registration
@@ -6,11 +9,11 @@ local settings = Settings(minetest.get_modpath("emeralds").."/settings.txt")
 
 --  Emerald Crystal
 minetest.register_craftitem("emeralds:emerald_crystal", {
-	description = "Emerald Crystal",
+	description = S("Emerald Crystal"),
 	inventory_image = "emerald_crystal_full.png",
 })
 minetest.register_craftitem("emeralds:emerald_crystal_piece", {
-	description = "Emerald Crystal Piece",
+	description = S("Emerald Crystal Piece"),
 	inventory_image = "emerald_crystal_piece.png",
 })
 
@@ -20,7 +23,7 @@ minetest.register_craftitem("emeralds:emerald_crystal_piece", {
 
 --  Ore
 minetest.register_node("emeralds:emerald_ore", {
-	description = "Emerald Ore",
+	description = S("Emerald Ore"),
 	tiles = {"default_stone.png^emerald_ore.png"},
 	groups = {cracky=3, stone=1},
 	drop = 'emeralds:emerald_crystal',
@@ -40,7 +43,7 @@ minetest.register_ore({
 
 -- Emerald Block
 minetest.register_node("emeralds:block", {
-	description = "Emerald Block",
+	description = S("Emerald Block"),
 	tiles = {"emerald_block.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_glass_defaults(),
@@ -48,7 +51,7 @@ minetest.register_node("emeralds:block", {
 
 -- Chiseled Emerald
 minetest.register_node("emeralds:chiseled", {
-	description = "Chiseled Emerald",
+	description = S("Chiseled Emerald"),
 	tiles = {"emerald_chiseled.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=1},
 	sounds = default.node_sound_glass_defaults(),
@@ -56,7 +59,7 @@ minetest.register_node("emeralds:chiseled", {
 
 -- Emerald Pillar
 minetest.register_node("emeralds:pillar", {
-	description = "Emerald Pillar",
+	description = S("Emerald Pillar"),
 	paramtype2 = "facedir",
 	tiles = {"emerald_pillar_top.png", "emerald_pillar_top.png", "emerald_pillar_side.png"},
 	groups = {cracky=3, oddly_breakable_by_hand=1},
@@ -72,7 +75,7 @@ stairs.register_stair_and_slab("emeraldblock", "emeralds:block",
 		"Emerald slab",
 		default.node_sound_glass_defaults())
 
-stairs.register_slab("emeraldstair", "emeralds:pillar",
+stairs.register_stair_and_slab("emeraldstair", "emeralds:pillar",
 		{cracky=3, oddly_breakable_by_hand=1},
 		{"emerald_pillar_top.png", "emerald_pillar_top.png", "emerald_pillar_side.png"},
 		"Emerald Pillar stair",
@@ -162,14 +165,15 @@ minetest.register_craft({
 })
 
 --Emerald Hoe
-minetest.register_craft({
-	output = 'emeralds:emerald_hoe',
-	recipe = {
-		{'', 'emeralds:emerald_crystal_piece', 'emeralds:emerald_crystal_piece'},
-		{'', 'default:stick', ''},
-		{'', 'default:stick', ''},
-	}
-})
+-- minetest.register_craft({
+--	output = 'emeralds:emerald_hoe',
+--	recipe = {
+--		{'', 'emeralds:emerald_crystal_piece', 'emeralds:emerald_crystal_piece'},
+--		{'', 'default:stick', ''},
+--		{'', 'default:stick', ''},
+--	}
+--})
+
 
 --Emerald Sword
 minetest.register_craft({
@@ -253,8 +257,9 @@ end
 
 
 -- Emerald Pickaxe
+local pickaxe_desc = S("Emerald Pickaxe")
 minetest.register_tool("emeralds:emerald_pickaxe", {
-	description = "Emerald Pickaxe",
+	description = toolranks_loaded and toolranks.create_description(pickaxe_desc) or pickaxe_desc,
 	inventory_image = "emerald_pickaxe.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
@@ -265,11 +270,15 @@ minetest.register_tool("emeralds:emerald_pickaxe", {
 		damage_groups = {fleshy=4},
 	},
 	sound = {breaks = "default_tool_breaks"},
+	-- toolranks support
+	original_description = toolranks_loaded and pickaxe_desc or nil,
+	after_use = toolranks_loaded and toolranks.new_afteruse or nil,
 })
 
 -- Emerald Axe
+local axe_desc = S("Emerald Axe")
 minetest.register_tool("emeralds:emerald_axe", {
-	description = "Emerald Axe",
+	description = toolranks_loaded and toolranks.create_description(axe_desc) or axe_desc,
 	inventory_image = "emerald_axe.png",
 	tool_capabilities = {
 		full_punch_interval = 1.0,
@@ -280,11 +289,15 @@ minetest.register_tool("emeralds:emerald_axe", {
 		damage_groups = {fleshy=4},
 	},
 	sound = {breaks = "default_tool_breaks"},
+	-- toolranks support
+	original_description = toolranks_loaded and axe_desc or nil,
+	after_use = toolranks_loaded and toolranks.new_afteruse or nil,
 })
 
 -- Emerald Shovel
+local shovel_desc = S("Emerald Shovel")
 minetest.register_tool("emeralds:emerald_shovel", {
-	description = "Emerald Shovel",
+	description = toolranks_loaded and toolranks.create_description(shovel_desc) or shovel_desc,
 	inventory_image = "emerald_shovel.png",
 	tool_capabilities = {
 		full_punch_interval = 1.1,
@@ -295,18 +308,29 @@ minetest.register_tool("emeralds:emerald_shovel", {
 		damage_groups = {fleshy=3},
 	},
 	sound = {breaks = "default_tool_breaks"},
+	-- toolranks support
+	original_description = toolranks_loaded and shovel_desc or nil,
+	after_use = toolranks_loaded and toolranks.new_afteruse or nil,
 })
 
 -- Emerald Hoe
-farming.register_hoe("emeralds:emerald_hoe", {
-	description = "Emerald Hoe",
+local hoe_desc = S("Emerald Hoe")
+if farm then
+   farming.register_hoe("emeralds:emerald_hoe", {
+	description = toolranks_loaded and toolranks.create_description(hoe_desc) or hoe_desc,
 	inventory_image = "emerald_hoe.png",
 	max_uses = 440,
-	material = "emeralds:emerald_crystal_piece"
+	material = "emeralds:emerald_crystal_piece",
+	-- toolranks support
+	original_description = toolranks_loaded and sword_desc or nil,
+	after_use = toolranks_loaded and toolranks.new_afteruse or nil,
 })
+end
+
 -- Emerald Sword
+local sword_desc = S("Emerald Sword")
 minetest.register_tool("emeralds:emerald_sword", {
-	description = "Emerald Sword",
+	description = toolranks_loaded and toolranks.create_description(sword_desc) or sword_desc,
 	inventory_image = "emerald_sword.png",
 	tool_capabilities = {
 		full_punch_interval = 0.8,
@@ -317,4 +341,12 @@ minetest.register_tool("emeralds:emerald_sword", {
 		damage_groups = {fleshy=6},
 	},
 	sound = {breaks = "default_tool_breaks"},
+	-- toolranks support
+	original_description = toolranks_loaded and sword_desc or nil,
+	after_use = toolranks_loaded and toolranks.new_afteruse or nil,
 })
+
+-- log
+if minetest.settings:get_bool("log_mods") then
+	minetest.log("action","[Emerald Items] Loaded.")
+end
